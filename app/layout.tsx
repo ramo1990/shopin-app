@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-// import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Ubuntu } from 'next/font/google';
-import NavBar from '../components/navbar/NavBar'
 import Footer from "@/components/footer/Footer";
 import NavBarContainer from "@/components/navbar/NavBarcontainer";
 import NavBarcontainer from "@/components/navbar/NavBarcontainer";
+import { CartProvider } from "@/context/CartContext";
+import Providers from "./providers";
 
 const ubuntu = Ubuntu({
   weight: ['400', '500', '700'],
@@ -25,13 +25,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={ubuntu.className}>
-        <main className="w-full">
-        <NavBarcontainer />
-        <div className='h-2' />
-        {children}
-        <div className='h-10' />
-        <Footer />
-        </main>
+        <Providers>
+          <main className="w-full">
+            <NavBarcontainer />
+            <div className='h-2' />
+            {children}
+            <div className='h-10' />
+            <Footer />
+          </main>
+        </Providers>
       </body>
     </html>
   );
