@@ -6,12 +6,26 @@ import ReviewForm from '@/components/productDetail/ReviewForm'
 import Modal from '@/components/uiComponents/Modal'
 import { Star } from 'lucide-react'
 import React from 'react'
+import axios from 'axios'
 
-const ProductPage = () => {
+
+interface ProductPageProps {
+  params: { slug: string }
+}
+
+const getProduct = async (slug: string) => {
+  const res = await axios.get(`http://127.0.0.1:8000/api/products/${slug}/`)
+  return res.data
+}
+
+const ProductPage = async ({params}: ProductPageProps ) => {
+
+  const product = await getProduct(params.slug)
+  // console.log('slug reçu:', params.slug)
   return (
     <>
     {/* Détails du produit */}
-      <ProductInfo />
+      <ProductInfo product={product}/>
 
         {/* Avis des clients */}
       <section className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12'>
@@ -31,11 +45,6 @@ const ProductPage = () => {
                     <Star className='fill-black w-5 h-5 cursor-pointer'/>
                     <Star className='fill-black w-5 h-5 cursor-pointer'/>
                 </div>
-                {/* <div className="flex justify-center gap-1 text-yellow-500">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="fill-current w-5 h-5" />
-              ))}
-            </div> */}
             </div>
 
             {/* Barres de progression */}
