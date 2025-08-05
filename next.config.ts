@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
         protocol: "http",
         hostname: "127.0.0.1",
         port: "8000", // important si ton backend tourne sur ce port
-        pathname: "/**", // autorise toutes les images
+        pathname: "/media/**", // autorise toutes les images
       },
       {
         protocol: 'https',
@@ -20,11 +20,16 @@ const nextConfig: NextConfig = {
         protocol: 'http',
         hostname: 'localhost',
         port: '8000', // backend Django en dev
-        pathname: "/**",
+        pathname: "/media/**",
       }
     ],
   },
 
+    // eslint: {
+    //   // Warning: This allows production builds to successfully complete even if
+    //   // your project has ESLint errors.
+    //   ignoreDuringBuilds: true,
+    // },
 };
 
 export default nextConfig;

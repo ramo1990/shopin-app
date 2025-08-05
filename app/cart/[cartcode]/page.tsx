@@ -1,11 +1,21 @@
+'use client'
+
+// import { auth } from '@/auth'
 import CartItem from '@/components/cart/CartItem'
 import CartSummary from '@/components/cart/CartSummary'
 import React from 'react'
 import { useCartContext } from '@/context/CartContext'
 
 
-const CartitemPage = () => {
+// interface CartPageProps {
+//   // params: { cartcode: string }
+// }
+
+export default /*async*/ function CartitemPage() {
   const { cart } = useCartContext()
+  // const cartCode = params.cartcode
+  // const session = await auth()
+  // const loggedInUser = session?.user?.email || null
 
   return (
     <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12'>
@@ -33,5 +43,3 @@ const CartitemPage = () => {
     </div>
   )
 }
-
-export default CartitemPage

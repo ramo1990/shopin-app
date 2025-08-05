@@ -1,16 +1,15 @@
 import React from 'react'
+import { cn } from '@/lib/utils' // optionnel si tu veux combiner les classes
 
-interface Props{
-    className: string;
-    children?: React.ReactNode;
-    type?: "button" | "submit" | "reset";
-    onClick?: () => void; 
+interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  className?: string;
+  children?: React.ReactNode;
 }
 
-const Button = ({className, children, type = "button", onClick }: Props) => {
+const Button = ({ className = '', children, ...rest }: Props) => {
   return (
-   <button className={className} type={type} onClick={onClick}>
-    {children}
+    <button className={cn('px-4 py-2 rounded', className)} {...rest}>
+      {children}
     </button>
   )
 }
