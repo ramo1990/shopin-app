@@ -6,16 +6,18 @@ import Image from "next/image"
 import { FaBars, FaCartShopping } from "react-icons/fa6"
 import { FaTimes } from "react-icons/fa"
 import clsx from "clsx"
+import { useAuth } from "@/context/AuthContext"
 
-interface Props {
-  LoggedInUser: {
-    name: string
-    email: string
-    image: string
-  } | null
-}
+// interface Props {
+//   loggedInUser: {
+//     name: string
+//     email: string
+//     image: string
+//   } | null
+// }
 
-const MobileNavbar: React.FC<Props> = ({ LoggedInUser }) => {
+const MobileNavbar = () => {
+  const { user: loggedInUser } = useAuth()
   const [isOpen, setIsOpen] = useState(false)
   const toggleMenu = () => setIsOpen(prev => !prev)
 
@@ -49,10 +51,10 @@ const MobileNavbar: React.FC<Props> = ({ LoggedInUser }) => {
         {/* Avatar & Name */}
         <div className="flex flex-col items-center gap-2 mb-6">
           <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-gray-400 shadow-sm bg-gray-200">
-            {LoggedInUser?.image && (
+            {loggedInUser?.image && (
               <Image
-                src={LoggedInUser.image}
-                alt={LoggedInUser.name}
+                src={loggedInUser.image}
+                alt={loggedInUser.name}
                 width={64}
                 height={64}
                 className="w-full h-full object-cover"
@@ -60,13 +62,13 @@ const MobileNavbar: React.FC<Props> = ({ LoggedInUser }) => {
             )}
           </div>
           <p className="text-lg font-semibold text-gray-800 text-center uppercase tracking-wide">
-            {LoggedInUser?.name || "Invité"}
+            {loggedInUser?.name || "Invité"}
           </p>
         </div>
 
         {/* Links */}
         <ul className="flex flex-col gap-4 text-sm font-medium">
-          {LoggedInUser ? (
+          {loggedInUser ? (
             <>
               <li>
                 <Link

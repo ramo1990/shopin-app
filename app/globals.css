@@ -203,3 +203,7 @@ nav a:hover {
 .cart-icon {
   @apply text-2xl text-black hover:text-gray-700 transition duration-200;
 } */
+
+html {
+  scroll-behavior: smooth;
+}
