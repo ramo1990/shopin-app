@@ -67,7 +67,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:3001",
     "http://localhost:3002",
-    'https://your-app-name.onrender.com',
+    'https://shopin-hfc7.onrender.com/',
 ]
 
 CORS_ALLOW_HEADERS = list(default_headers) + [

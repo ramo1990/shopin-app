@@ -28,12 +28,20 @@ export default function ShippingForm() {
     if (!token) return alert('Connectez-vous pour continuer.')
 
     try {
+      const token = await refreshTokenIfNeeded()
+      if (!token) return alert('Connectez-vous pour continuer.')
+
+      console.log('Formulaire envoyé dans shipping form:', form)
+
       // Crée l’adresse
-      const addressRes = await axiosInstance.post('/shipping-address/', form, {
+      const { payment_method, ...addressOnly } = form
+      const addressRes = await axiosInstance.post('/shipping-address/', addressOnly, {
         headers: { Authorization: `Bearer ${token}` },
       })
 
+      console.log('Réponse complète:', addressRes.data)
       const addressId = addressRes.data.id
+      console.log('Adresse créée avec ID :', addressId)
 
       // Crée la commande
       const orderRes = await axiosInstance.post(
@@ -48,8 +56,8 @@ export default function ShippingForm() {
       )
 
       router.push(`/payment/${orderRes.data.order_id}`)
-    } catch (err) {
-      console.error('Erreur adresse/commande:', err)
+    } catch (err: any) {
+      console.error('Erreur adresse/commande:', err.response?.data || err.message)
     }
   }
 
