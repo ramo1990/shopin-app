@@ -28,7 +28,10 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = True
 # DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    'https://shopin-hfc7.onrender.com/',]
 
 
 # Application definition
@@ -67,7 +70,6 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:3001",
     "http://localhost:3002",
-    'https://shopin-hfc7.onrender.com/',
 ]
 
 CORS_ALLOW_HEADERS = list(default_headers) + [
