@@ -31,6 +31,7 @@ urlpatterns = [
     path("get_address/", GetAddressByEmailOrPhoneView.as_view(), name='get-address'),
     path('contact/', contact_message_view, name='contact-message'),
     path('order-tracking/', OrderTrackingAPIView.as_view(), name='order-tracking'),
+    path("webhook/stripe/", stripe_webhook, name="stripe-webhook"),
 ]
 
 urlpatterns += router.urls

@@ -5,6 +5,7 @@ import uuid
 from django.utils import timezone
 from datetime import timedelta
 
+
 # produits
 class Product(models.Model):
     title = models.CharField(max_length=255)
@@ -24,6 +25,11 @@ class Product(models.Model):
     def __str__(self):
         return self.title
 
+    class Meta:
+        verbose_name = "Produit"
+        verbose_name_plural = "Produits"
+
+# categorie des produits
 class Tag(models.Model):
     name = models.CharField(max_length=50)
     slug = models.SlugField(unique=False, blank=True)
@@ -37,6 +43,10 @@ class Tag(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = "Catégorie de produit"
+        verbose_name_plural = "Catégories de produits"
+
 # Panier
 class CartItem(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='cart_items')
@@ -48,6 +58,10 @@ class CartItem(models.Model):
 
     def __str__(self):
         return f"{self.product.title} x {self.quantity}"
+    
+    class Meta:
+        verbose_name = "Article dans le panier"
+        verbose_name_plural = "Articles dans le panier"
 
 # adresse de livraison
 class ShippingAddress(models.Model):
@@ -62,8 +76,12 @@ class ShippingAddress(models.Model):
 
     def __str__(self):
         return f"{self.full_name}, {self.address}"
+    
+    class Meta:
+        verbose_name = "Adresse de livraison"
+        verbose_name_plural = "Adresses de livraison"
 
-# commande
+# Commandes
 class Order(models.Model):
     PAYMENT_METHOD_CHOICES = [
         ('card', 'Carte bancaire'),
@@ -89,6 +107,10 @@ class Order(models.Model):
 
     def __str__(self):
         return f"Commande #{self.id} - {self.user.username}"
+    
+    class Meta:
+        verbose_name = "Commande"
+        verbose_name_plural = "Commandes"
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
@@ -100,6 +122,10 @@ class OrderItem(models.Model):
     def __str__(self):
         return f"{self.quantity} x {self.name}"
     
+    class Meta:
+        verbose_name = "Article de la commande"
+        verbose_name_plural = "Articles de la commande"
+    
 # commentaire et note
 class Review(models.Model):
     product = models.ForeignKey(Product, related_name='reviews', on_delete=models.CASCADE)
@@ -110,6 +136,10 @@ class Review(models.Model):
 
     def __str__(self):
         return f"Avis de {self.user} sur {self.product}"
+    
+    class Meta:
+        verbose_name = "Avis"
+        verbose_name_plural = "Avis"
 
 # page nous contacter
 class ContactMessage(models.Model):
@@ -120,3 +150,7 @@ class ContactMessage(models.Model):
 
     def __str__(self):
         return f"Message de {self.name} ({self.email})"
+    
+    class Meta:
+        verbose_name = "Message de contact"
+        verbose_name_plural = "Messages de contact"
