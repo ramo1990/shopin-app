@@ -3,6 +3,7 @@ services:
     name: shopin-backend
     env: python
     plan: free
+    rootDir: backend # va dans backend/ pour builder l'app
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn shopin.wsgi:application
     build:
@@ -10,4 +11,3 @@ services:
     envVars:
       - key: DJANGO_SETTINGS_MODULE
         value: shopin.settings
-    rootDir: backend
