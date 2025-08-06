@@ -31,7 +31,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
-    'https://shopin-hfc7.onrender.com/',]
+    'shopin-hfc7.onrender.com/',]
 
 
 # Application definition
