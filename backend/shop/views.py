@@ -21,6 +21,8 @@ from django.db.models import Q
 from rest_framework.permissions import AllowAny
 from django.core.mail import send_mail 
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
 
 
 User = get_user_model()
@@ -192,12 +194,24 @@ class ShippingAddressCreateView(ListCreateAPIView):
     
     # aficher l'erreur precise
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
+        user = request.user
+        existing_address = ShippingAddress.objects.filter(user=user).first()
+
+        if existing_address:
+            # Mise à jour de l'adresse existante
+            serializer = self.get_serializer(existing_address, data=request.data)
+        else:
+            serializer = self.get_serializer(data=request.data)
+
         if not serializer.is_valid():
             print("==== Serializer Errors ====")
             print(serializer.errors)
             return Response(serializer.errors, status=400)
-        return super().create(request, *args, **kwargs)
+        
+        serializer.save(user=user)
+        print("==== Adresse créée ====")
+        print(serializer.data)      
+        return Response(serializer.data, status=201)
 
 class GetAddressByEmailOrPhoneView(APIView):
     permission_classes = [AllowAny]  # ou [IsAuthenticated]
@@ -302,8 +316,11 @@ class CreateCheckoutSessionView(APIView):
             return Response({"error": "Commande non trouvée"}, status=status.HTTP_404_NOT_FOUND)
 
         success_url = f'{settings.FRONTEND_URL}/confirmation/{order.id}'
-        cancel_url = request.build_absolute_uri(f'/payment/{order.id}')
+        cancel_url = f'{settings.FRONTEND_URL}/cancel'
+        print("🔙 cancel_url:", cancel_url)
+        # cancel_url = request.build_absolute_uri(f'/payment/{order.id}')
 
+        # creation de la section stripe
         session = stripe.checkout.Session.create(
             payment_method_types=['card'],
             line_items=[{
@@ -321,7 +338,20 @@ class CreateCheckoutSessionView(APIView):
         order.stripe_checkout_id = session.id
         order.save()
 
+        print(f"Session Stripe créée avec ID: {session.id}")
+        print(f"stripe_checkout_id dans la DB pour order {order.id} : {order.stripe_checkout_id}")
+
         return Response({"sessionId": session.id})
+
+# Valider le paiement
+def paiement_valide(order_id):
+    try:
+        order = Order.objects.get(order_id=order_id)
+        order.payment_status = 'paid'  # ou "success"
+        order.save()
+    except Order.DoesNotExist:
+        # Gérer l'erreur
+        pass
 
 # page contact: enregistre et envoie de message
 @api_view(['POST'])
@@ -413,3 +443,47 @@ class OrderTrackingAPIView(APIView):
         
         serializer = OrderSerializer(order)
         return Response(serializer.data)
+
+# Stipe webhook
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
+
+@csrf_exempt
+def stripe_webhook(request):
+    print("==> Webhook Stripe reçu")
+    payload = request.body
+    sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
+    endpoint_secret = settings.STRIPE_WEBHOOK_SECRET  # à définir dans .env
+    # event = None
+
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, endpoint_secret
+        )
+    except ValueError as e:
+        print("⚠️ Payload invalide:", e)
+        return HttpResponse(status=400)
+    except stripe.error.SignatureVerificationError as e:
+        print("⚠️ Signature non vérifiée:", e)
+        return HttpResponse(status=400)
+
+    print("✅ Event reçu:", event["type"])  # ← Affiche le type d'événement
+
+    # Quand un paiement est terminé
+    if event['type'] == 'checkout.session.completed':
+        session = event['data']['object']
+        print("🧾 Session reçue :", session)  # ← Ajoute ça
+
+        stripe_session_id = session.get('id')
+        print("🔍 Recherche Order avec stripe_checkout_id =", stripe_session_id)
+
+        try:
+            order = Order.objects.get(stripe_checkout_id=stripe_session_id)
+            order.payment_status = 'paid'
+            order.save()
+            print("✅ Commande mise à jour:", order.id)
+        except Order.DoesNotExist:
+            # pass  # ignore ou log
+            print("❌ Aucune commande trouvée avec cet ID")
+
+    return HttpResponse(status=200)
