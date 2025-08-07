@@ -26,7 +26,7 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'nextjs-django.s3.amazonaws.com',
-        pathname: '/**',
+        pathname: '**',
       },
     ],
   },
