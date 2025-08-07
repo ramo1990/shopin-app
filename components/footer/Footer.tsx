@@ -12,13 +12,16 @@ interface Category {
     slug: string
   }
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 const Footer = () => {
     const [categories, setCategories] = useState<Category[]>([])
 
     useEffect(() => {
         const fetchCategories = async () => {
           try {
-            const res = await fetch('http://127.0.0.1:8000/api/tags/', { cache: 'no-store' })
+            // const res = await fetch('http://127.0.0.1:8000/api/tags/', { cache: 'no-store' }) // local
+            const res = await fetch(`${API_URL}/tags/`, { cache: 'no-store' }) // prod
             const data = await res.json()
             console.log("🔎 Catégories récupérées pour le footer:", data)
             setCategories(data)

@@ -9,6 +9,8 @@ import React, { useState } from 'react'
 import axios from 'axios'
 
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 // Composant de la page "Mot de passe oublié"
 const ForgotPasswordPage = () => {
   // État local pour stocker l'email saisi par l'utilisateur
@@ -23,7 +25,7 @@ const ForgotPasswordPage = () => {
     e.preventDefault() // Empêche le rechargement de la page
     try {
       // Envoie une requête POST à l'API Django pour déclencher l'envoi de l'email de réinitialisation
-      await axios.post('http://127.0.0.1:8000/api/password/reset/', { email })
+      await axios.post(`${API_URL}/password/reset/`, { email })
       // Si tout se passe bien, on indique que l'opération a réussi
       setSuccess(true)
     } catch (err: unknown) {

@@ -41,16 +41,20 @@ export async function generateMetadata({ params }: {params: Promise<Params>}){
 
 }
 
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
 const CategoryPage = async ({ params }:  CategoryPageProps) => {
   const { slug } = await params;
 
   // Récupérer les produits par catégorie (tag)
-  const productsRes = await fetch(`http://127.0.0.1:8000/api/products/by-tag/${slug}/`, { cache: 'no-store' });
+  // const productsRes = await fetch(`http://127.0.0.1:8000/api/products/by-tag/${slug}/`, { cache: 'no-store' }); // local
+  const productsRes = await fetch(`${apiUrl}/products/by-tag/${slug}/`, { cache: 'no-store' });
   const productsData = await productsRes.json();
   const products: Product[] = productsData.results || productsData;
 
   // Récupérer toutes les catégories (pour les boutons)
-  const categoriesRes = await fetch('http://127.0.0.1:8000/api/tags/', { cache: 'no-store' });
+  // const categoriesRes = await fetch('http://127.0.0.1:8000/api/tags/', { cache: 'no-store' }); // local
+  const categoriesRes = await fetch(`${apiUrl}/tags/`, { cache: 'no-store' });
   const categories: Category[] = await categoriesRes.json();
 
   return (

@@ -46,6 +46,8 @@ interface OrderData {
   user: number
 }
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 export default function OrderTracking() {
   const [orderId, setOrderId] = useState("")
   const [order, setOrder] = useState<OrderData | null>(null)
@@ -61,7 +63,8 @@ export default function OrderTracking() {
     }
 
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/order-tracking/?order_id=${orderId}`)
+      // const res = await fetch(`http://127.0.0.1:8000/api/order-tracking/?order_id=${orderId}`) // local
+      const res = await fetch(`${API_URL}/order-tracking/?order_id=${orderId}`)
       if (!res.ok) {
         if (res.status === 404) setError("Commande non trouvée.")
         else setError("Erreur lors de la récupération de la commande.")

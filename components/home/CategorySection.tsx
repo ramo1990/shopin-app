@@ -10,13 +10,16 @@ interface Category {
   image: string;
 }
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 const CategorySection = () => {
   const [categories, setCategories] = useState<Category[]>([]);
 
   useEffect(() => {
     const fetchTags = async () => {
       try {
-        const res = await fetch('http://127.0.0.1:8000/api/tags/');
+        // const res = await fetch('http://127.0.0.1:8000/api/tags/'); // local
+        const res = await fetch(`${API_URL}/tags/`);
         const data = await res.json();
         setCategories(data);
       } catch (error) {
