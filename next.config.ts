@@ -21,7 +21,13 @@ const nextConfig: NextConfig = {
         hostname: 'localhost',
         port: '8000', // backend Django en dev
         pathname: "/media/**",
-      }
+      },
+      // image AWS
+      {
+        protocol: 'https',
+        hostname: 'nextjs-django.s3.amazonaws.com',
+        pathname: '/**',
+      },
     ],
   },
 
