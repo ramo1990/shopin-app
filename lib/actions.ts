@@ -3,7 +3,8 @@
 import { signOut, signIn } from "@/auth"
 import axiosInstance from './axiosInstance'
 
-const API_BASE = "http://127.0.0.1:8000/api"  // URL de base de l'API Django
+// const API_BASE = "http://127.0.0.1:8000/api"  // URL de base de l'API Django
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000/api"
 
 // Fonction de connexion avec identifiants classiques (username + password)
 export async function loginUser(username: string, password: string) {
@@ -17,7 +18,8 @@ export async function loginUser(username: string, password: string) {
     localStorage.setItem('refreshToken', refresh)
 
     // Étape 2 : Récupération des informations de l'utilisateur connecté
-    const userRes = await axiosInstance.get("/me/", {
+    // const userRes = await axiosInstance.get("/me/", { // test
+    const userRes = await axiosInstance.get(`${API_BASE}/me/`, {
       headers: { Authorization: `Bearer ${access}` }  // Authentification avec le token d'accès
     })
 

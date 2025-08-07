@@ -1,8 +1,9 @@
 'use client'
 
 import React, { useState } from 'react'
-
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const ContactPage = () => {
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -22,7 +23,8 @@ const ContactPage = () => {
 
     try {
         // Ici tu peux envoyer vers ton backend, un email, ou un outil comme Formspree / EmailJS / etc.
-        const res = await fetch('http://127.0.0.1:8000/api/contact/', {
+        // const res = await fetch('http://127.0.0.1:8000/api/contact/', { // local
+        const res = await fetch(`${API_URL}/contact/`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(formData),

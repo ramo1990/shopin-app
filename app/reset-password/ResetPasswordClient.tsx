@@ -13,6 +13,7 @@ import PasswordField from '@/components/password/PasswordField'
 import type { AxiosError } from 'axios'
 
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 // Composant de la page de réinitialisation du mot de passe
 const ResetPasswordPage = () => {
   // États pour stocker les deux mots de passe saisis
@@ -41,7 +42,8 @@ const ResetPasswordPage = () => {
 
     try {
       // Envoie de la requête à l'API Django pour réinitialiser le mot de passe
-      await axios.post('http://127.0.0.1:8000/api/password/reset/confirm/', {
+      // await axios.post('http://127.0.0.1:8000/api/password/reset/confirm/', { // local
+      await axios.post(`${API_URL}/password/reset/confirm/`, {
         uid,
         token,
         new_password1: newPassword,
