@@ -7,7 +7,7 @@ export default function CancelPage() {
     <section className="max-w-xl mx-auto text-center py-16 px-4">
       <h1 className="text-3xl font-bold text-red-600 mb-6">Paiement annulé</h1>
       <p className="text-lg mb-8">
-        Votre paiement a été annulé ou n'a pas pu être traité. 
+        Votre paiement a été annulé ou n&apos;a pas pu être traité. 
         Vous pouvez réessayer ou contacter le support si le problème persiste.
       </p>
       <div className="space-x-4">

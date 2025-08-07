@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { refreshTokenIfNeeded } from '@/lib/auth'
 import axiosInstance from '@/lib/axiosInstance'
+import type { AxiosError } from 'axios'
 
 export default function ShippingForm() {
   const router = useRouter()
@@ -34,7 +35,9 @@ export default function ShippingForm() {
       console.log('Formulaire envoyé dans shipping form:', form)
 
       // Crée l’adresse
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { payment_method, ...addressOnly } = form
+
       const addressRes = await axiosInstance.post('/shipping-address/', addressOnly, {
         headers: { Authorization: `Bearer ${token}` },
       })
@@ -56,9 +59,11 @@ export default function ShippingForm() {
       )
 
       router.push(`/payment/${orderRes.data.order_id}`)
-    } catch (err: any) {
-      console.error('Erreur adresse/commande:', err.response?.data || err.message)
+    } catch (err: unknown) {
+      const error = err as AxiosError
+      console.error('Erreur adresse/commande:', error.response?.data || error.message)
     }
+        
   }
 
   return (
