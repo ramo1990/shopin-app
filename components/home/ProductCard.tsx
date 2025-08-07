@@ -23,7 +23,7 @@ const ProductCard: React.FC<ProductCardProps> = ({product}) => {
     <div className='w-[260px] rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 bg-white 
               flex flex-col items-center px-5 py-6 hover:scale-[1.02] hover:border hover:border-gray-200'>
         <div className='w-[200px] h-[200px] rounded-md overflow-hidden'>
-            <Image src={safeImageUrl} alt={product.title} unoptimized width={200} height={200}
+            <Image src={safeImageUrl} alt={product.title} width={200} height={200}
             className='object-cover w-full h-full transition-transform duration-300 hover:scale-105' />
         </div>
         

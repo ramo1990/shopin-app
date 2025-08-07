@@ -40,7 +40,7 @@ const ProductInfo = ({ product }: ProductInfoProps) => {
             src={product.image}
             alt={product.title}
             fill
-            unoptimized
+            // unoptimized
             className='object-cover rounded-xl'
             sizes='(max-width: 768px) 100vw, 400px'
           />
